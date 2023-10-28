@@ -1,6 +1,6 @@
 {
 	"name": "simplify-ranges",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Merge and normalize adjacent or overlapping integer ranges",
 	"license": "MIT",
 	"repository": "sindresorhus/simplify-ranges",
