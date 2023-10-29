@@ -1,4 +1,4 @@
-export default function simplidyRanges(ranges, {separateTwoNumberRanges} = {}) {
+export default function simplifyRanges(ranges, {separateTwoNumberRanges} = {}) {
 	if (!Array.isArray(ranges)) {
 		throw new TypeError(`Expected an array, got \`${typeof ranges}\`.`);
 	}
