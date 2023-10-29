@@ -9,24 +9,27 @@ export default function simplifyRanges(ranges, {separateTwoNumberRanges} = {}) {
 
 	// Normalize ranges
 	const result = ranges
-	.map(([start, end]) => start <= end ? [start, end] : [end, start])
-	.sort((a, b) => a[0] - b[0])
-	.reduce((acc, [start, end]) => {
-	  if (acc.length > 0) {
-		const [lastStart, lastEnd] = acc[acc.length - 1];
-		if (start - 1 <= lastEnd) {
-			const newEnd = Math.max(end, lastEnd);
-			acc[acc.length - 1] = [lastStart, newEnd];
-		  return acc;
-		}
-	  }
-	  acc.push([start, end]);
-	  return acc;
-	}, []);
-  
-  	if (separateTwoNumberRanges) {
+		.map(([start, end]) => start <= end ? [start, end] : [end, start])
+		.sort((a, b) => a[0] - b[0])
+		// eslint-disable-next-line unicorn/no-array-reduce
+		.reduce((acc, [start, end]) => {
+			if (acc.length > 0) {
+				// eslint-disable-next-line unicorn/prefer-at
+				const [lastStart, lastEnd] = acc[acc.length - 1];
+				if (start - 1 <= lastEnd) {
+					const newEnd = Math.max(end, lastEnd);
+					acc[acc.length - 1] = [lastStart, newEnd];
+					return acc;
+				}
+			}
+
+			acc.push([start, end]);
+			return acc;
+		}, []);
+
+	if (separateTwoNumberRanges) {
 		return result.flatMap(([start, end]) => start + 1 === end ? [[start, start], [end, end]] : [[start, end]]);
-  	}
-  
-  	return result;
+	}
+
+	return result;
 }
