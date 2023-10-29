@@ -8,26 +8,25 @@ export default function simplifyRanges(ranges, {separateTwoNumberRanges} = {}) {
 	}
 
 	// Normalize ranges
-	ranges = ranges
-		.map(([start, end]) => start <= end ? [start, end] : [end, start])
-		.sort((a, b) => a[0] - b[0]);
-
-	const result = [ranges[0]];
-
-	for (const [start, end] of ranges.slice(1)) {
-		const [lastStart, lastEnd] = result.at(-1);
-
+	const result = ranges
+	.map(([start, end]) => start <= end ? [start, end] : [end, start])
+	.sort((a, b) => a[0] - b[0])
+	.reduce((acc, [start, end]) => {
+	  if (acc.length > 0) {
+		const [lastStart, lastEnd] = acc[acc.length - 1];
 		if (start - 1 <= lastEnd) {
 			const newEnd = Math.max(end, lastEnd);
-			result[result.length - 1] = [lastStart, newEnd];
-		} else {
-			result.push([start, end]);
+			acc[acc.length - 1] = [lastStart, newEnd];
+		  return acc;
 		}
-	}
-
-	if (separateTwoNumberRanges) {
+	  }
+	  acc.push([start, end]);
+	  return acc;
+	}, []);
+  
+  	if (separateTwoNumberRanges) {
 		return result.flatMap(([start, end]) => start + 1 === end ? [[start, start], [end, end]] : [[start, end]]);
-	}
-
-	return result;
+  	}
+  
+  	return result;
 }
